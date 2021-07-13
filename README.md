@@ -1,1 +1,1 @@
-# ReactJSBasic
+# React JS Basic study's project by Evgeniy Politiko 
