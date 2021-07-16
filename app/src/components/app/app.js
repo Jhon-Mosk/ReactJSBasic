@@ -1,10 +1,5 @@
-import './App.css';
-
-function Message(props) {
-    return (
-        <p>{props.text}</p>
-    );
-}
+import './app.css';
+import Message from '../message/message'
 
 function App(props) {
     
