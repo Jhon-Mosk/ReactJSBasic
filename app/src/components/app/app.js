@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './app.css';
-import MessageForm from '../MessageForm/messageForm'
+import Input from '../Input/input'
+import Button from '../Button/button'
+import Render from '../Render/render'
 
 // Добавить в компонент App поле стейта messageList. В нем хранить массив 
 // объектов - сообщений (объект должен содержать, как минимум, поля text и author). 
@@ -18,52 +20,17 @@ function App(props) {
     const [messageList, setMessageList] = useState([]);
     const [userMessage, setUserMessage] = useState({});
 
-    // const handleChange = (event) => {
-    //     setValue(event.target.value);
-    // };
-
-    // {
-    //     date: new Date,
-    //     author: 'fghg',
-    //     text: event.target.value,
-    // }
-    // const message = messageList.map((item, index) => <div key={index}>{item.author}: {item.text}</div>);
-
     // useEffect ( () => console.log(messageList),
     //     [messageList]
     // );
-    function Input(props) {
-        return (
-            <input type="text" onChange={handleChange} />
-        )
-    }
-
-    function Button(props) {
-        return (
-            <button type="button" onClick={sendUserMessage}>Отправить</button>
-        )
-    }
-
-    const sendUserMessage = () => {
-        console.log(messageList)
-        setMessageList((prevMessageList) => prevMessageList.concat([userMessage]));
-    }
-
-    const handleChange = (event) => {
-        let newMessage = {
-                author: 'Я',
-                text: event.target.value,
-            };
-        setUserMessage(Object.assign(userMessage, newMessage));
-    }
 
     return (
         <div className="App">
             <header className="App-header">
                 My First React App
-                <Input></Input>
-                <Button></Button>
-                <div>{messageList.map((item, index) => <div key={index}>{item.author}: {item.text}</div>)}</div>
+                <Input userMessage={userMessage} setUserMessage={setUserMessage}></Input>
+                <Button messageList={messageList} setMessageList={setMessageList} userMessage={userMessage}></Button>
+                <Render messageList={messageList}></Render>
             </header>
         </div>
     );
