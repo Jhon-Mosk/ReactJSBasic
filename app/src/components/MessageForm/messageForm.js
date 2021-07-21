@@ -1,7 +1,19 @@
 import { useState} from 'react';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    messageForm: {
+        display: 'flex',
+    },
+    messageFormInput: {
+        flexGrow: 1,
+    },
+}));
 
 function MessageForm(props) {
     const [value, setValue] = useState('');
+    const classes = useStyles();
+    const theme = useTheme();
 
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -9,7 +21,7 @@ function MessageForm(props) {
     
     const sendUserMessage = () => {
         let newMessage = {
-                id: Math.random() * (1000 - 1) + 1,
+                id: Math.round(Math.random() * (1000 - 1) + 1),
                 author: 'Я',
                 text: value,
             };
@@ -24,8 +36,8 @@ function MessageForm(props) {
     }
 
     return (
-        <div>
-            <input type="text" value={value} onChange={handleChange} onKeyDown={checkKey}/>
+        <div className={classes.messageForm}>
+            <input className={classes.messageFormInput} type="text" value={value} onChange={handleChange} onKeyDown={checkKey}/>
             <button type="button" onClick={sendUserMessage}>Отправить</button>
         </div>
     )

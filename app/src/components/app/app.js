@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import './app.css';
-import Render from '../Render/render'
-import MessageForm from '../MessageForm/messageForm'
+import Panel from '../Panel/panel';
+import generateBotPhrase from '../BotPhrase/botPhrase'
 
-function App(props) {
+function App() {
     const [messageList, setMessageList] = useState([]);
+
+
 
     useEffect(() => {
         if(messageList.length > 0 && messageList[messageList.length-1].author !== 'Бот') {
@@ -13,9 +14,9 @@ function App(props) {
             }, 1500);
 
             let botMessage = {
-                id: Math.random() * (1000 - 1) + 1,
+                id: Math.round(Math.random() * (1000 - 1) + 1),
                 author: 'Бот',
-                text: 'Не устал по кнопкам тыкать?',
+                text: generateBotPhrase(),
             };
         }
     },
@@ -29,9 +30,7 @@ function App(props) {
     return (
         <div className="App">
             <header className="App-header">
-                My First React App
-                <MessageForm addMessage={addMessage}></MessageForm>
-                <Render messageList={messageList}></Render>
+                <Panel addMessage={addMessage} messageList={messageList}></Panel>
             </header>
         </div>
     );
