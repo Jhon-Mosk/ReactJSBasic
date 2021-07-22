@@ -9,15 +9,15 @@ function App() {
 
     useEffect(() => {
         if(messageList.length > 0 && messageList[messageList.length-1].author !== 'Бот') {
-            setTimeout(() => {
-                addMessage(botMessage);
-            }, 1500);
-
             let botMessage = {
                 id: Math.round(Math.random() * (1000 - 1) + 1),
                 author: 'Бот',
                 text: generateBotPhrase(),
             };
+            
+            setTimeout(() => {
+                addMessage(botMessage);
+            }, 1500);
         }
     },
         [messageList]
