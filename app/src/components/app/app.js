@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react';
 import Panel from '../Panel/panel';
-import generateBotPhrase from '../BotPhrase/botPhrase'
+import generateBotPhrase from '../BotPhrase/botPhrase';
 
 function App() {
     const [messageList, setMessageList] = useState([]);
 
-
-
     useEffect(() => {
-        if(messageList.length > 0 && messageList[messageList.length-1].author !== 'Бот') {
+        if (messageList.length > 0 && messageList[messageList.length - 1].author !== 'Бот') {
             let botMessage = {
                 id: Math.round(Math.random() * (1000 - 1) + 1),
                 author: 'Бот',
                 text: generateBotPhrase(),
             };
-            
+
             setTimeout(() => {
                 addMessage(botMessage);
             }, 1500);

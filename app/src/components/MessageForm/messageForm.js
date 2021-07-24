@@ -4,9 +4,16 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     messageForm: {
         display: 'flex',
+        position: 'fixed',
+        top: `calc(100vh - 21px)`,
+        width: `100%`
     },
     messageFormInput: {
-        flexGrow: 1,
+        flexBasis: '80%',
+    },
+    messageFormButton: {
+        flexBasis: '15%',
+        textAlign: 'center',
     },
 }));
 
@@ -44,7 +51,7 @@ function MessageForm(props) {
     return (
         <div className={classes.messageForm}>
             <input ref={inputRef} className={classes.messageFormInput} type="text" value={value} onChange={handleChange} onKeyDown={checkKey}/>
-            <button type="button" onClick={sendUserMessage}>Отправить</button>
+            <button className={classes.messageFormButton} type="button" onClick={sendUserMessage}>Отправить</button>
         </div>
     )
 }

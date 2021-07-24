@@ -23,7 +23,7 @@ import Faker from 'faker'
 
 const drawerWidth = 240;
 
-const chatList = Array.from ({
+const chatList = Array.from({
     length: 10
 }).map(() => ({
     id: Faker.datatype.uuid(),
@@ -91,11 +91,13 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         width: `calc(100vw - ${drawerWidth}px)`,
-        height: `100vh`,
+        minHeight: `100vh`,
         flexGrow: 1,
         padding: theme.spacing(3),
         background: `#282c34`,
         color: `white`,
+        justifyContent: 'end',
+        justifyItems: 'end',
     },
 }));
 
@@ -166,11 +168,13 @@ export default function MiniDrawer(props) {
                     ))}
                 </List>
             </Drawer>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                <MessageForm addMessage={props.addMessage}></MessageForm>                          
-                <Render messageList={props.messageList}></Render>
-            </main>
+            {/* <div className={classes.contentWrap}> */}
+                <main className={classes.content}>
+                    <div className={classes.toolbar} />
+                    <Render messageList={props.messageList}></Render>
+                    <MessageForm addMessage={props.addMessage}></MessageForm>
+                </main>
+            {/* </div> */}
         </div >
     );
 }
