@@ -6,30 +6,20 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import Render from '../Render/render'
 import MessageForm from '../MessageForm/messageForm'
-import Avatar from '@material-ui/core/Avatar';
-import Faker from 'faker'
+import Navigation from '../Navigation/navigation';
+import ChatList from '../ChatList/chatList';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 const drawerWidth = 240;
-
-const chatList = Array.from({
-    length: 10
-}).map(() => ({
-    id: Faker.datatype.uuid(),
-    avatar: Faker.image.avatar(),
-    name: Faker.name.firstName(),
-}));
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     toolbar: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
@@ -91,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         width: `calc(100vw - ${drawerWidth}px)`,
-        minHeight: `100vh`,
+        minHeight: `calc(100vh - 64px)`,
         flexGrow: 1,
         padding: theme.spacing(3),
         background: `#282c34`,
@@ -135,9 +125,7 @@ export default function MiniDrawer(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
-                        My First React App
-                    </Typography>
+                    <Navigation />
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -154,27 +142,23 @@ export default function MiniDrawer(props) {
                 }}
             >
                 <div className={classes.toolbar}>
+                    <Fab color="primary" aria-label="add">
+                        <AddIcon />
+                    </Fab>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
                 </div>
                 <Divider />
                 <List>
-                    {chatList.map((item) => (
-                        <ListItem button key={item.id}>
-                            <ListItemIcon>{<Avatar alt={item.name} src={item.avatar} />}</ListItemIcon>
-                            <ListItemText primary={item.name} />
-                        </ListItem>
-                    ))}
+                    <ChatList />
                 </List>
             </Drawer>
-            {/* <div className={classes.contentWrap}> */}
-                <main className={classes.content}>
-                    <div className={classes.toolbar} />
-                    <Render messageList={props.messageList}></Render>
-                    <MessageForm addMessage={props.addMessage}></MessageForm>
-                </main>
-            {/* </div> */}
+            <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Render messageList={props.messages}></Render>
+                <MessageForm chatId={props.chatId} addMessage={props.addMessage}></MessageForm>
+            </main>
         </div >
     );
 }

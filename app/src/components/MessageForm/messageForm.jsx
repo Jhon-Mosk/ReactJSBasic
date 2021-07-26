@@ -1,18 +1,21 @@
 import React, { useEffect, useState} from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     messageForm: {
         display: 'flex',
         position: 'fixed',
         top: `calc(100vh - 21px)`,
-        width: `100%`
+        width: `calc(100vw - 240px)`
+    },
+    messageFormHide: {
+        display: 'none',
     },
     messageFormInput: {
-        flexBasis: '80%',
+        flexGrow: 1,
     },
     messageFormButton: {
-        flexBasis: '15%',
+        width: '20vw',
         textAlign: 'center',
     },
 }));
@@ -20,7 +23,14 @@ const useStyles = makeStyles((theme) => ({
 function MessageForm(props) {
     const [value, setValue] = useState('');
     const classes = useStyles();
-    const theme = useTheme();
+
+    const checkInputVisibility = () => {
+        if(props.chatId === undefined) {
+            return (classes.messageFormHide);
+        } else {
+            return (classes.messageForm);
+        } 
+    };
 
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -49,7 +59,7 @@ function MessageForm(props) {
     });
 
     return (
-        <div className={classes.messageForm}>
+        <div className={checkInputVisibility()}>
             <input ref={inputRef} className={classes.messageFormInput} type="text" value={value} onChange={handleChange} onKeyDown={checkKey}/>
             <button className={classes.messageFormButton} type="button" onClick={sendUserMessage}>Отправить</button>
         </div>
