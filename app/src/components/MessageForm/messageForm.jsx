@@ -25,7 +25,7 @@ function MessageForm(props) {
     const classes = useStyles();
 
     const checkInputVisibility = () => {
-        if(props.chatId === undefined) {
+        if(!props.inputVisibility) {
             return (classes.messageFormHide);
         } else {
             return (classes.messageForm);

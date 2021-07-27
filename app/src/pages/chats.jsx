@@ -2,9 +2,14 @@ import { useState, useEffect } from 'react';
 import Panel from '../components/Panel/panel';
 import generateBotPhrase from '../components/BotPhrase/botPhrase';
 import { useParams } from 'react-router-dom';
-import generateInitialChats from '../components/ChatList/initialChats';
+import generateInitialChats from '../components/ChatList/generateInitialChats';
+import generateChatList from '../components/ChatList/generateChatList';
 
-const initialChats = generateInitialChats();
+const numberChats = 10;
+var inputVisibility = false;
+
+const initialChats = generateInitialChats(numberChats);
+const chatList = generateChatList(numberChats);
 
 function Chats() {  
     const [messageList, setMessageList] = useState([]);
@@ -33,11 +38,13 @@ function Chats() {
     }
 
     const checkChatId = (chatId) => {
-        if(chatId === undefined) {
+        if(chatId === undefined || (chatId.slice(2) >= numberChats)) {
+            inputVisibility = false;
             return (
                 []
             )
         } else {
+            inputVisibility = true;
             return (
                 chats[chatId].messages
             );
@@ -49,8 +56,9 @@ function Chats() {
             <header className="App-header">
                 <Panel
                     addMessage={addMessage}
-                    chatId={chatId}
+                    inputVisibility={inputVisibility}
                     messages={checkChatId(chatId)}
+                    chatList={chatList}
                 />
             </header>
         </div>

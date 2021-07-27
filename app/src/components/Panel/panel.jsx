@@ -151,13 +151,13 @@ export default function MiniDrawer(props) {
                 </div>
                 <Divider />
                 <List>
-                    <ChatList />
+                    <ChatList chatList={props.chatList} />
                 </List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <Render messageList={props.messages}></Render>
-                <MessageForm chatId={props.chatId} addMessage={props.addMessage}></MessageForm>
+                <MessageForm inputVisibility={props.inputVisibility} addMessage={props.addMessage}></MessageForm>
             </main>
         </div >
     );
