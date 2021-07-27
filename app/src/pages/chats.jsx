@@ -5,16 +5,17 @@ import { useParams } from 'react-router-dom';
 import generateInitialChats from '../components/ChatList/generateInitialChats';
 import generateChatList from '../components/ChatList/generateChatList';
 
-const numberChats = 10;
-var inputVisibility = false;
+let numberChats = 10;
+let inputVisibility = false;
 
-const initialChats = generateInitialChats(numberChats);
-const chatList = generateChatList(numberChats);
+let initialChats = generateInitialChats(numberChats);
+let chatsList = generateChatList(numberChats);
 
 function Chats() {  
     const [messageList, setMessageList] = useState([]);
     const { chatId } = useParams();
     const [chats, setChats] = useState(initialChats);
+    const [chatList, setChatList] = useState(chatsList);
     
     useEffect(() => {
         if (messageList.length > 0 && messageList[messageList.length - 1].author !== 'Бот') {
@@ -51,6 +52,25 @@ function Chats() {
         }
     };
 
+    const plusChat = () => {
+        numberChats++;
+        setChats(generateInitialChats(numberChats));
+        setChatList(generateChatList(numberChats));
+    };
+//TODO переработать удаление
+    const deleteChat = () => {
+        let newChats;
+        for(let item in chats) {
+            if(item !== [chatId]) {
+                newChats[item] = {...item};
+            }
+        }
+        setChats(newChats);
+        console.log(chats)
+        // delete chats[chatId];
+        delete chatList[chatId.slice(2)];
+    }
+
     return (
         <div className="App">
             <header className="App-header">
@@ -59,6 +79,8 @@ function Chats() {
                     inputVisibility={inputVisibility}
                     messages={checkChatId(chatId)}
                     chatList={chatList}
+                    plusChat={plusChat}
+                    deleteChat={deleteChat}
                 />
             </header>
         </div>

@@ -142,7 +142,7 @@ export default function MiniDrawer(props) {
                 }}
             >
                 <div className={classes.toolbar}>
-                    <Fab color="primary" aria-label="add">
+                    <Fab onClick={props.plusChat} color="primary" aria-label="add">
                         <AddIcon />
                     </Fab>
                     <IconButton onClick={handleDrawerClose}>
@@ -151,7 +151,7 @@ export default function MiniDrawer(props) {
                 </div>
                 <Divider />
                 <List>
-                    <ChatList chatList={props.chatList} />
+                    <ChatList plusChat={props.plusChat} chatList={props.chatList} deleteChat={props.deleteChat} />
                 </List>
             </Drawer>
             <main className={classes.content}>

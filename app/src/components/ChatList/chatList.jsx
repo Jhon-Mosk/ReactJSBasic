@@ -13,7 +13,7 @@ export default function ChatList(props) {
                 <ListItem button key={item.id}>
                     <ListItemIcon>{<Avatar alt={item.name} src={item.avatar} />}</ListItemIcon>
                     <ListItemText primary={item.name} />
-                    <IconButton aria-label="delete">
+                    <IconButton onClick={props.deleteChat} aria-label="delete">
                         <DeleteIcon fontSize="small" />
                     </IconButton>
                 </ListItem>
