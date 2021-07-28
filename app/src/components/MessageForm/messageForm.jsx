@@ -45,7 +45,7 @@ function MessageForm(props) {
         props.addMessage(newMessage);
         setValue('');
     }
-
+    //проверяем нажат ли энтер в поле ввода, если нажат отправляем сообщение
     const checkKey = (event) => {
         if(event.code === "Enter") {
             sendUserMessage();
@@ -53,7 +53,7 @@ function MessageForm(props) {
     }
 
     const inputRef = React.createRef();
-
+    //автофокус на поле ввода
     useEffect(() => {
         inputRef.current?.focus();
     });

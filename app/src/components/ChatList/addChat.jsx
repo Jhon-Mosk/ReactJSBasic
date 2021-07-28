@@ -1,5 +1,5 @@
 import Faker from 'faker';
-
+//для добавления одного нового чата
 export default function addChat(numberChats) {
     const chatList = Array.from({
         length: 1

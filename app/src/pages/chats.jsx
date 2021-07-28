@@ -6,18 +6,18 @@ import generateInitialChats from '../components/ChatList/generateInitialChats';
 import generateChatList from '../components/ChatList/generateChatList';
 import addChat from '../components/ChatList/addChat';
 
-let numberChats = 10;
-let inputVisibility = false;
+let numberChats = 10; // количество чатов
+let inputVisibility = false; //видимость поля ввода
 
-let initialChats = generateInitialChats(numberChats);
-let chatsList = generateChatList(numberChats);
+let initialChats = generateInitialChats(numberChats); //объект 
+let chatsList = generateChatList(numberChats); //массив чатов
 
 function Chats() {  
     const [messageList, setMessageList] = useState([]);
     const { chatId } = useParams();
     const [chats, setChats] = useState(initialChats);
     const [chatList, setChatList] = useState(chatsList);
-    
+    //ответ бота на каждое сообщение
     useEffect(() => {
         if (messageList.length > 0 && messageList[messageList.length - 1].author !== 'Бот') {
             let botMessage = {
@@ -33,12 +33,12 @@ function Chats() {
     },
         [messageList]
     );
-
+    //отправка сообщений
     const addMessage = (newMessage) => {
         initialChats[chatId].messages.push(newMessage);
         setMessageList(prevMessageList => prevMessageList.concat(newMessage));
     }
-
+    //проверка chatId для отображения сообщений
     const checkChatId = (chatId) => {
         if(chatId === undefined || (chatId.slice(2) >= numberChats) || chats[chatId] === undefined) {
             inputVisibility = false;
@@ -52,15 +52,14 @@ function Chats() {
             );
         }
     };
-
+    //добавление нового чата
     const plusChat = () => {
         numberChats++;
         setChats(generateInitialChats(numberChats));
         let newChatList = chatList.concat(addChat(numberChats));
         setChatList(newChatList);
     };
-//TODO переработать удаление
-//как вариант присвоить chatId значение undefined
+    //удаление чата
     const deleteChat = (event) => {
         let newChats = {};
         for(let item in chats) {
