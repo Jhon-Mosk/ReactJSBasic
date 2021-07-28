@@ -14,7 +14,7 @@ function App() {
                 author: 'Бот',
                 text: generateBotPhrase(),
             };
-            
+
             setTimeout(() => {
                 addMessage(botMessage);
             }, 1500);
