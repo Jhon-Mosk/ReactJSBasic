@@ -4,6 +4,7 @@ import generateBotPhrase from '../components/BotPhrase/botPhrase';
 import { useParams } from 'react-router-dom';
 import generateInitialChats from '../components/ChatList/generateInitialChats';
 import generateChatList from '../components/ChatList/generateChatList';
+import addChat from '../components/ChatList/addChat';
 
 let numberChats = 10;
 let inputVisibility = false;
@@ -39,7 +40,7 @@ function Chats() {
     }
 
     const checkChatId = (chatId) => {
-        if(chatId === undefined || (chatId.slice(2) >= numberChats)) {
+        if(chatId === undefined || (chatId.slice(2) >= numberChats) || chats[chatId] === undefined) {
             inputVisibility = false;
             return (
                 []
@@ -55,20 +56,28 @@ function Chats() {
     const plusChat = () => {
         numberChats++;
         setChats(generateInitialChats(numberChats));
-        setChatList(generateChatList(numberChats));
+        let newChatList = chatList.concat(addChat(numberChats));
+        setChatList(newChatList);
     };
 //TODO переработать удаление
-    const deleteChat = () => {
-        let newChats;
+//как вариант присвоить chatId значение undefined
+    const deleteChat = (event) => {
+        let newChats = {};
         for(let item in chats) {
-            if(item !== [chatId]) {
-                newChats[item] = {...item};
-            }
-        }
+            if(item != event.target.parentElement.id && item != event.target.id) {
+                newChats[item] = {...chats[item]};
+            };
+        };
         setChats(newChats);
-        console.log(chats)
-        // delete chats[chatId];
-        delete chatList[chatId.slice(2)];
+
+        let newChatList= [];
+        for(let item of chatList) {
+            if(item.id != event.target.parentElement.id && item.id != event.target.id) {
+                newChatList.push(item);
+                    };
+        }
+        setChatList(newChatList);
+        
     }
 
     return (
