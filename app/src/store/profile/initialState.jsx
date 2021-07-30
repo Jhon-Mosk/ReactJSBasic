@@ -1,6 +1,7 @@
 const initialState = {
     showName: false,
-    name: 'Default'
+    whenTrueStatus: 'В сети',
+    whenFalseStatus: 'Не сети',
 };
 
 export default initialState;

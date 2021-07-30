@@ -1,7 +1,7 @@
-const EXAMPLE_ACTION = "EXAMPLE_ACTION";
+const USER_STATUS_ACTION = "USER_STATUS_ACTION";
 
-const exampleAction = {
-    type: EXAMPLE_ACTION
+const userStatusAction = {
+    type: USER_STATUS_ACTION,
 }
 
-export default exampleAction;
+export default userStatusAction;

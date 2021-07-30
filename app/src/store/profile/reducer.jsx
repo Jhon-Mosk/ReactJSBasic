@@ -2,7 +2,7 @@ import initialState from './initialState';
 
 const profileReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "EXAMPLE_ACTION":
+        case "USER_STATUS_ACTION":
             return {
                 ...state,
                 showName: !state.showName

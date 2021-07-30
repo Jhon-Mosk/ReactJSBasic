@@ -3,6 +3,8 @@ import Faker from 'faker';
 import { useCallback, useState } from 'react';
 import store from '../store/store';
 import toggleShowName from '../store/profile/actions';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 const user = {
     id: Faker.datatype.uuid(),
@@ -29,8 +31,8 @@ const useStyles = makeStyles({
 export default function Main() {
     const classes = useStyles();
     const [dummy, setDummy] = useState({});
-    
-    const { showName, name } = store.getState();
+
+    const { showName, whenTrueStatus, whenFalseStatus } = store.getState();
     const dispatch = store.dispatch;
 
     const setShowName = useCallback(() => {
@@ -42,20 +44,21 @@ export default function Main() {
         <>
             <div className={classes.root}>
                 <img className={classes.avatar} src={user.avatar} alt={user.name}></img>
-                <div className={classes.data}>Имя: {user.name}</div>
+                <div>
+                    <div className={classes.data}>Имя: {user.name}</div>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showName}
+                                    onChange={setShowName}
+                                    name="checkedB"
+                                    color="primary"
+                                />
+                            }
+                            label={showName ? <div>{whenTrueStatus}</div> : <div>{whenFalseStatus}</div>}
+                        />
+                </div>
             </div>
-            <div>
-                <h4>Profile</h4>
-                <input
-                    type="checkbox"
-                    checked={showName}
-                    value={showName}
-                    onChange={setShowName}
-                />
-                <span>Show Name</span>
-                {showName && <div>{name}</div>}
-            </div>
-
         </>
     );
 };
