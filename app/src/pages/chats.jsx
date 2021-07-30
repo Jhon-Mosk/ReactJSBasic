@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import Panel from '../components/Panel/panel';
 import generateBotPhrase from '../components/BotPhrase/botPhrase';
 import { useParams } from 'react-router-dom';
 import generateInitialChats from '../components/ChatList/generateInitialChats';
 import generateChatList from '../components/ChatList/generateChatList';
 import addChat from '../components/ChatList/addChat';
+import addInitialChat from '../components/ChatList/addInitialChat';
 
-let numberChats = 10; // количество чатов
+let numberChats = 2; // количество чатов
 let inputVisibility = false; //видимость поля ввода
 
 let initialChats = generateInitialChats(numberChats); //объект 
@@ -35,7 +36,7 @@ function Chats() {
     );
     //отправка сообщений
     const addMessage = (newMessage) => {
-        initialChats[chatId].messages.push(newMessage);
+        chats[chatId].messages.push(newMessage);
         setMessageList(prevMessageList => prevMessageList.concat(newMessage));
     }
     //проверка chatId для отображения сообщений
@@ -55,10 +56,14 @@ function Chats() {
     //добавление нового чата
     const plusChat = () => {
         numberChats++;
-        setChats(generateInitialChats(numberChats));
+        let newInitialChat = addInitialChat(numberChats);
+        let newChats = {...chats, ...newInitialChat};
+        setChats(newChats);
+        
         let newChatList = chatList.concat(addChat(numberChats));
         setChatList(newChatList);
     };
+
     //удаление чата
     const deleteChat = (event) => {
         let newChats = {};
