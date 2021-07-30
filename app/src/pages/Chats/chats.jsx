@@ -37,7 +37,9 @@ function Chats() {
     );
     //отправка сообщений
     const addMessage = (newMessage) => {
-        chats[chatId].messages.push(newMessage);
+        let newChats = {...chats};
+        newChats[chatId].messages.push(newMessage);
+        setChats(newChats);
         setMessageList(prevMessageList => prevMessageList.concat(newMessage));
     }
     //проверка chatId для отображения сообщений
