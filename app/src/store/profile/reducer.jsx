@@ -5,7 +5,7 @@ const profileReducer = (state = initialState, action) => {
         case "USER_STATUS_ACTION":
             return {
                 ...state,
-                showName: !state.showName
+                showName: !state.showName,
             }
         default:
             return state
