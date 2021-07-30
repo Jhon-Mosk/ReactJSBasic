@@ -7,7 +7,7 @@ import generateChatList from '../components/ChatList/generateChatList';
 import addChat from '../components/ChatList/addChat';
 import addInitialChat from '../components/ChatList/addInitialChat';
 
-let numberChats = 2; // количество чатов
+let numberChats = 10; // количество чатов
 let inputVisibility = false; //видимость поля ввода
 
 let initialChats = generateInitialChats(numberChats); //объект 
