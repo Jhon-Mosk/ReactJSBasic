@@ -1,11 +1,12 @@
 import { useState, useEffect, createContext } from 'react';
-import Panel from '../components/Panel/panel';
-import generateBotPhrase from '../components/BotPhrase/botPhrase';
+import Panel from '../../components/Panel/panel';
+import generateBotPhrase from '../../components/BotPhrase/botPhrase';
 import { useParams } from 'react-router-dom';
-import generateInitialChats from '../components/ChatList/generateInitialChats';
-import generateChatList from '../components/ChatList/generateChatList';
-import addChat from '../components/ChatList/addChat';
-import addInitialChat from '../components/ChatList/addInitialChat';
+import generateInitialChats from '../../components/ChatList/generateInitialChats';
+import generateChatList from '../../components/ChatList/generateChatList';
+import addChat from '../../components/ChatList/addChat';
+import addInitialChat from '../../components/ChatList/addInitialChat';
+import MessagesContext from './context/MessagesContext';
 
 let numberChats = 10; // количество чатов
 let inputVisibility = false; //видимость поля ввода
@@ -87,14 +88,15 @@ function Chats() {
     return (
         <div className="App">
             <header className="App-header">
-                <Panel
-                    addMessage={addMessage}
-                    inputVisibility={inputVisibility}
-                    messages={checkChatId(chatId)}
-                    chatList={chatList}
-                    plusChat={plusChat}
-                    deleteChat={deleteChat}
-                />
+                <MessagesContext.Provider value={checkChatId(chatId)}>
+                    <Panel
+                        addMessage={addMessage}
+                        inputVisibility={inputVisibility}
+                        chatList={chatList}
+                        plusChat={plusChat}
+                        deleteChat={deleteChat}
+                    />
+                </MessagesContext.Provider>
             </header>
         </div>
     );

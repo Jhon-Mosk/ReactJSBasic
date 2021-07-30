@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import MessagesContext from '../../pages/Chats/context/MessagesContext';
+
 function Render(props) {
+    const contextValue = useContext(MessagesContext);
     return (
-        <>{props.messageList.map((item) => <div key={item.id}>{item.author}: {item.text}</div>)}</>
+        <>{contextValue.map((item) => <div key={item.id}>{item.author}: {item.text}</div>)}</>
     )
 }
 

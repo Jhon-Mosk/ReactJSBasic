@@ -156,7 +156,7 @@ export default function MiniDrawer(props) {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Render messageList={props.messages}></Render>
+                <Render />
                 <MessageForm inputVisibility={props.inputVisibility} addMessage={props.addMessage}></MessageForm>
             </main>
         </div >
