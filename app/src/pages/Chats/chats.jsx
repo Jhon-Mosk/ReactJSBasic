@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from 'react';
-import Panel from '../../components/Panel/panel';
+import ChatsPanel from '../../components/Panel/panel';
 import generateBotPhrase from '../../components/BotPhrase/botPhrase';
 import { useParams } from 'react-router-dom';
 import generateInitialChats from '../../components/ChatList/generateInitialChats';
@@ -91,7 +91,7 @@ function Chats() {
         <div className="App">
             <header className="App-header">
                 <MessagesContext.Provider value={checkChatId(chatId)}>
-                    <Panel
+                    <ChatsPanel
                         addMessage={addMessage}
                         inputVisibility={inputVisibility}
                         chatList={chatList}
