@@ -1,7 +1,11 @@
-const USER_STATUS_ACTION = "USER_STATUS_ACTION";
+export const CHANGE_USER_STATUS = "CHANGE_USER_STATUS";
+export const CHANGE_USER_NAME = "CHANGE_USER_NAME";
 
-const userStatusAction = {
-    type: USER_STATUS_ACTION,
-}
+export const createChangeUserStatus = {
+    type: CHANGE_USER_STATUS,
+};
 
-export default userStatusAction;
+export const createChangeUserName = (newName) => ({
+    type: CHANGE_USER_NAME,
+    payload: newName,
+});
