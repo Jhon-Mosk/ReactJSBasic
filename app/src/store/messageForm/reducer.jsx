@@ -9,11 +9,13 @@ export const messageFormReducer = (state = initialState, action) => {
         case SHOW_MESSAGE_FORM:
             return {
                 ...state,
+                messageFormVisibility: true,
             }
 
         case HIDE_MESSAGE_FORM:
             return {
                 ...state,
+                messageFormVisibility: false,
             }
 
         default: {

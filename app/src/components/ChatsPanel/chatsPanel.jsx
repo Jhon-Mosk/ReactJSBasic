@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -93,10 +93,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MiniDrawer(props) {
+export default function MiniDrawer() {
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
 
     const handleDrawerOpen = () => {
@@ -107,9 +107,9 @@ export default function MiniDrawer(props) {
         setOpen(false);
     };
     //добавление нового чата
-    const plusChat = () => {
+    const plusChat = useCallback(() => {
         dispatch(createAddChat());
-    };
+    }, [dispatch]);
 
     return (
         <div className={classes.root}>

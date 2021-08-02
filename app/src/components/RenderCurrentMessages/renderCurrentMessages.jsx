@@ -1,8 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
+import { shallowEqual } from "react-redux";
+import { getMessageList } from '../../store/messages/selectors';
 
 export default function RenderCurrentMessages() {
-    const messageList = useSelector(state => state.messages.messageList);
+    const messageList = useSelector(getMessageList, shallowEqual);
     const { chatId } = useParams();
 
     function isEmpty(obj) {

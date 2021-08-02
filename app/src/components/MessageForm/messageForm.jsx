@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAddMessage } from '../../store/messages/actions';
 import { useParams } from 'react-router-dom';
 import generateBotPhrase from '../BotPhrase/botPhrase';
+import { checkKeyOnEnter } from '../../utils/checkKeyOnEnter';
+import { getInputVisibility } from '../../store/messageForm/selectors';
+import { getProfileName } from '../../store/profile/selectors';
 
 const useStyles = makeStyles(() => ({
     messageForm: {
@@ -25,15 +28,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 function MessageForm() {
-    const [value, setValue] = useState('');
     const classes = useStyles();
-    const profileName = useSelector(state => state.profile.name);
-    const dispatch = useDispatch();
+    const profileName = useSelector(getProfileName);
+    const inputVisibility = useSelector(getInputVisibility);
+    const [value, setValue] = useState('');
     const { chatId } = useParams();
-    const inputVisibility = useSelector(state => state.messageForm.messageFormVisibility)
+    const dispatch = useDispatch();
 
     const checkInputVisibility = () => {
-        if (!inputVisibility) {
+        if (!inputVisibility || chatId === undefined) {
             return (classes.messageFormHide);
         } else {
             return (classes.messageForm);
@@ -44,29 +47,29 @@ function MessageForm() {
         setValue(event.target.value);
     }
     //отправляем сообщение в хранилище
-    const sendUserMessage = () => {
+    const sendUserMessage = useCallback(() => {
         let author = profileName || 'Я';
         dispatch(createAddMessage(chatId, author, value));
         setValue('');
         botAnswer();
-    }
+    }, [dispatch, chatId, value, profileName]);
 
     //ответ бота на каждое сообщение
-    const botAnswer = () => {        
-            let botMessage = {
-                author: 'Бот',
-                text: generateBotPhrase(),
-            }
+    const botAnswer = useCallback(() => {
+        let botMessage = {
+            author: 'Бот',
+            text: generateBotPhrase(),
+        }
 
-            setTimeout(() => {
-                dispatch(createAddMessage(chatId, botMessage.author, botMessage.text));;
-            }, 1500);
-        
-    };
-    
+        setTimeout(() => {
+            dispatch(createAddMessage(chatId, botMessage.author, botMessage.text));;
+        }, 1500);
+
+    }, [dispatch, chatId]);
+
     //проверяем нажат ли энтер в поле ввода, если нажат отправляем сообщение
     const checkKey = (event) => {
-        if (event.code === "Enter") {
+        if (checkKeyOnEnter(event.code)) {
             sendUserMessage();
         };
     }

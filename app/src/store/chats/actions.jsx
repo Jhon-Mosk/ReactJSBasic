@@ -3,9 +3,9 @@ import Faker from 'faker';
 export const ADD_CHAT = "ADD_CHAT";
 export const REMOVE_CHAT = "REMOVE_CHAT";
 
-export const createAddChat = () => ({
+export const createAddChat = (newChatName) => ({
     type: ADD_CHAT,
-    name: Faker.name.firstName(),
+    name: newChatName || Faker.name.firstName(),
     avatar: Faker.image.avatar(),
 });
 
