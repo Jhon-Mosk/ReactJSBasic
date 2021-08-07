@@ -1,4 +1,4 @@
-import { ADD_MESSAGE } from "./actions";
+import { ADD_MESSAGE, REMOVE_MESSAGES } from "./actions";
 
 const initialState = {
     // to be stored like this {[chatId]: [{id, text, author}]}
@@ -24,6 +24,18 @@ export const messagesReducer = (state = initialState, action) => {
                 },
             };
         }
+
+        case REMOVE_MESSAGES: {
+            let newMessageList = state.messageList;
+            delete newMessageList[action.chatId];    
+            return {
+                ...state,
+                messageList: {
+                    ...newMessageList,
+                },
+            };
+        }
+
         default:
             return state;
     }

@@ -14,7 +14,6 @@ export default function RenderCurrentMessages() {
             document.body.offsetHeight, document.documentElement.offsetHeight,
             document.body.clientHeight, document.documentElement.clientHeight
         );
-        console.log(scrollHeight);
         window.scrollBy(0,scrollHeight)
     }, [chatId, messageList])
 

@@ -12,6 +12,7 @@ import { createHideMessageForm, createShowMessageForm } from '../../store/messag
 import { shallowEqual } from "react-redux";
 import { getChatList } from '../../store/chats/selectors';
 import { useCallback } from 'react';
+import { createRemoveMessages } from '../../store/messages';
 
 const useStyles = makeStyles(() => ({
     wrap: {
@@ -51,6 +52,7 @@ export default function ChatList() {
     const deleteChat = useCallback((event) => {
         dispatch(createHideMessageForm())
         dispatch(createRemoveChat(event.target.parentElement.id || event.target.id));
+        dispatch(createRemoveMessages(event.target.parentElement.id || event.target.id));
     }, [dispatch]);
     //меняет видимость поля ввода
     const changeMessageFormVisibility = useCallback(() => {
