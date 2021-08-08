@@ -13,13 +13,14 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
-import MessageForm from '../MessageForm/messageForm'
+// import MessageForm from '../MessageForm/messageForm'
 import Navigation from '../Navigation/navigation';
-import ChatListContainer from '../../containers/chatListContainer';
+import ChatListContainer from '../../containers/ChatListContainer';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { useDispatch } from 'react-redux';
 import { createAddChat } from '../../store/chats/actions';
+import MessageFormContainer from '../../containers/MessageFormContainer';
 
 const drawerWidth = 240;
 
@@ -164,7 +165,7 @@ export default function MiniDrawer() {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <RenderCurrentMessages />
-                <MessageForm />
+                <MessageFormContainer />
             </main>
         </div >
     );

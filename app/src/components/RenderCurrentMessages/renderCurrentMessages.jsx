@@ -26,7 +26,7 @@ export default function RenderCurrentMessages() {
     }
 
     const checkMessageListEmpty = (messageList) => {
-        if(messageList[chatId] == undefined || isEmpty(messageList)) {
+        if(messageList[chatId] === undefined || isEmpty(messageList)) {
             return (
                 []
             )

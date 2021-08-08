@@ -1,13 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import { makeStyles } from '@material-ui/core/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { createAddMessage } from '../../store/messages/actions';
-import { useParams } from 'react-router-dom';
-import generateBotPhrase from '../BotPhrase/botPhrase';
-import { checkKeyOnEnter } from '../../utils/checkKeyOnEnter';
 import { getInputVisibility } from '../../store/messageForm/selectors';
-import { getProfileName } from '../../store/profile/selectors';
-import { getChatList } from '../../store/chats';
 
 const useStyles = makeStyles(() => ({
     messageForm: {
@@ -28,57 +23,28 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-function MessageForm() {
+function MessageForm(props) {
     const classes = useStyles();
-    const profileName = useSelector(getProfileName);
-    const chatList = useSelector(getChatList);
     const inputVisibility = useSelector(getInputVisibility);
-    const [value, setValue] = useState('');
-    const { chatId } = useParams();
-    const dispatch = useDispatch();
-
+    
+    //проверям видимость и присваиваем стили
     const checkInputVisibility = () => {
-        if (!inputVisibility || chatId === undefined) {
+        if (!inputVisibility || props.chatId === undefined) {
             return (classes.messageFormHide);
         } else {
             return (classes.messageForm);
         }
     };
 
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    }
-
-    const getBotName = () => {
-        let botData = chatList.filter((item) => item.id === chatId);
-        return botData[0].name
-    }
-
-    //ответ бота на каждое сообщение WithThunk
-    const sendUserMessageWithThunk = (chatId, author, message) => (dispatch, getState) => {
-        dispatch(createAddMessage(chatId, author, message));
-        if (author !== 'Бот') {
-            let botMessage = {
-                author: getBotName(),
-                text: generateBotPhrase(),
-            };
-            setTimeout(() => dispatch(createAddMessage(chatId, botMessage.author, botMessage.text)), 1500);
-        }
-    };
-
-    //отправляем сообщение в хранилище WithThunk
-    const sendUserMessage = useCallback((message) => {
-        let author = profileName || 'Я';
-        dispatch(sendUserMessageWithThunk(chatId, author, message));
-        setValue('');
-    }, [chatId, dispatch, profileName]);
-
-    //проверяем нажат ли энтер в поле ввода, если нажат отправляем сообщение
-    const checkKey = (event) => {
-        if (checkKeyOnEnter(event.code)) {
-            sendUserMessage(value);
-        };
-    }
+    //проверяется существует ли id введённый в url
+    useEffect(() => {
+        props.hideMessageForm()
+        for(let item of props.chatList) {
+            if(props.chatId === item.id) {               
+                props.showMessageForm()                
+            } 
+        } 
+    }, [props.chatId])
 
     const inputRef = React.createRef();
     //автофокус на поле ввода
@@ -88,8 +54,8 @@ function MessageForm() {
 
     return (
         <div className={checkInputVisibility()}>
-            <input ref={inputRef} className={classes.messageFormInput} type="text" value={value} onChange={handleChange} onKeyDown={checkKey} />
-            <button className={classes.messageFormButton} type="button" onClick={() => sendUserMessage(value)}>Отправить</button>
+            <input ref={inputRef} className={classes.messageFormInput} type="text" value={props.value} onChange={props.handleChange} onKeyDown={props.checkKey} />
+            <button className={classes.messageFormButton} type="button" onClick={props.sendUserMessage}>Отправить</button>
         </div>
     )
 }
