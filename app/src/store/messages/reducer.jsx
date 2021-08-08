@@ -8,17 +8,17 @@ const initialState = {
 export const messagesReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_MESSAGE: {
-            const currentList = state.messageList[action.chatId] || [];
+            const currentList = state.messageList[action.payload.chatId] || [];
             return {
                 ...state,
                 messageList: {
                     ...state.messageList,
-                    [action.chatId]: [
+                    [action.payload.chatId]: [
                         ...currentList,
                         {
-                            message: action.message,
-                            id: `${action.chatId}${currentList.length}`,
-                            author: action.author,
+                            message: action.payload.message,
+                            id: `${action.payload.chatId}${currentList.length}`,
+                            author: action.payload.author,
                         },
                     ],
                 },
@@ -27,7 +27,7 @@ export const messagesReducer = (state = initialState, action) => {
 
         case REMOVE_MESSAGES: {
             let newMessageList = state.messageList;
-            delete newMessageList[action.chatId];    
+            delete newMessageList[action.payload.chatId];    
             return {
                 ...state,
                 messageList: {
