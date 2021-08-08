@@ -15,7 +15,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
 import MessageForm from '../MessageForm/messageForm'
 import Navigation from '../Navigation/navigation';
-import ChatList from '../ChatList/chatList';
+import ChatListContainer from '../../containers/chatListContainer';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { useDispatch } from 'react-redux';
@@ -158,7 +158,7 @@ export default function MiniDrawer() {
                 </div>
                 <Divider />
                 <List>
-                    <ChatList/>
+                    <ChatListContainer />
                 </List>
             </Drawer>
             <main className={classes.content}>
