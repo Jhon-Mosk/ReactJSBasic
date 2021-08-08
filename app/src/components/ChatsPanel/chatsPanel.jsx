@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -18,6 +18,8 @@ import Navigation from '../Navigation/navigation';
 import ChatList from '../ChatList/chatList';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import { useDispatch } from 'react-redux';
+import { createAddChat } from '../../store/chats/actions';
 
 const drawerWidth = 240;
 
@@ -91,10 +93,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MiniDrawer(props) {
+export default function MiniDrawer() {
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -103,6 +106,10 @@ export default function MiniDrawer(props) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    //добавление нового чата
+    const plusChat = useCallback(() => {
+        dispatch(createAddChat());
+    }, [dispatch]);
 
     return (
         <div className={classes.root}>
@@ -142,7 +149,7 @@ export default function MiniDrawer(props) {
                 }}
             >
                 <div className={classes.toolbar}>
-                    <Fab onClick={props.plusChat} color="primary" aria-label="add">
+                    <Fab onClick={plusChat} color="primary" aria-label="add">
                         <AddIcon />
                     </Fab>
                     <IconButton onClick={handleDrawerClose}>
@@ -151,13 +158,13 @@ export default function MiniDrawer(props) {
                 </div>
                 <Divider />
                 <List>
-                    <ChatList plusChat={props.plusChat} chatList={props.chatList} deleteChat={props.deleteChat} />
+                    <ChatList/>
                 </List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <RenderCurrentMessages />
-                <MessageForm inputVisibility={props.inputVisibility} addMessage={props.addMessage}></MessageForm>
+                <MessageForm />
             </main>
         </div >
     );

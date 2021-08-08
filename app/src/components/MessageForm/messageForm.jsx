@@ -1,5 +1,12 @@
-import React, { useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { createAddMessage } from '../../store/messages/actions';
+import { useParams } from 'react-router-dom';
+import generateBotPhrase from '../BotPhrase/botPhrase';
+import { checkKeyOnEnter } from '../../utils/checkKeyOnEnter';
+import { getInputVisibility } from '../../store/messageForm/selectors';
+import { getProfileName } from '../../store/profile/selectors';
 
 const useStyles = makeStyles(() => ({
     messageForm: {
@@ -20,34 +27,49 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-function MessageForm(props) {
-    const [value, setValue] = useState('');
+function MessageForm() {
     const classes = useStyles();
+    const profileName = useSelector(getProfileName);
+    const inputVisibility = useSelector(getInputVisibility);
+    const [value, setValue] = useState('');
+    const { chatId } = useParams();
+    const dispatch = useDispatch();
 
     const checkInputVisibility = () => {
-        if(!props.inputVisibility) {
+        if (!inputVisibility || chatId === undefined) {
             return (classes.messageFormHide);
         } else {
             return (classes.messageForm);
-        } 
+        }
     };
 
     const handleChange = (event) => {
         setValue(event.target.value);
     }
-    
-    const sendUserMessage = () => {
-        let newMessage = {
-                id: Math.round(Math.random() * (1000 - 1) + 1),
-                author: 'Я',
-                text: value,
-            };
-        props.addMessage(newMessage);
+    //отправляем сообщение в хранилище
+    const sendUserMessage = useCallback(() => {
+        let author = profileName || 'Я';
+        dispatch(createAddMessage(chatId, author, value));
         setValue('');
-    }
+        botAnswer();
+    }, [dispatch, chatId, value, profileName]);
+
+    //ответ бота на каждое сообщение
+    const botAnswer = useCallback(() => {
+        let botMessage = {
+            author: 'Бот',
+            text: generateBotPhrase(),
+        }
+
+        setTimeout(() => {
+            dispatch(createAddMessage(chatId, botMessage.author, botMessage.text));;
+        }, 1500);
+
+    }, [dispatch, chatId]);
+
     //проверяем нажат ли энтер в поле ввода, если нажат отправляем сообщение
     const checkKey = (event) => {
-        if(event.code === "Enter") {
+        if (checkKeyOnEnter(event.code)) {
             sendUserMessage();
         };
     }
@@ -60,7 +82,7 @@ function MessageForm(props) {
 
     return (
         <div className={checkInputVisibility()}>
-            <input ref={inputRef} className={classes.messageFormInput} type="text" value={value} onChange={handleChange} onKeyDown={checkKey}/>
+            <input ref={inputRef} className={classes.messageFormInput} type="text" value={value} onChange={handleChange} onKeyDown={checkKey} />
             <button className={classes.messageFormButton} type="button" onClick={sendUserMessage}>Отправить</button>
         </div>
     )

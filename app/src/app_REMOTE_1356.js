@@ -14,11 +14,7 @@ function App() {
                 author: 'Бот',
                 text: generateBotPhrase(),
             };
-<<<<<<< HEAD
-
-=======
             
->>>>>>> lesson3
             setTimeout(() => {
                 addMessage(botMessage);
             }, 1500);

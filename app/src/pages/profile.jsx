@@ -1,16 +1,12 @@
 import { makeStyles } from '@material-ui/core';
-import Faker from 'faker';
-import { useCallback } from 'react';
-import toggleShowName from '../store/profile/actions';
+import { useCallback, useState } from 'react';
+import { createChangeUserStatus, createChangeUserName, createChangeUserImage, createChangeUserSrcImage } from '../store/profile/actions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { useDispatch, useSelector } from 'react-redux';
-
-const user = {
-    id: Faker.datatype.uuid(),
-    avatar: Faker.image.avatar(),
-    name: Faker.name.firstName(),
-}
+import { checkKeyOnEnter } from '../utils/checkKeyOnEnter';
+import { getProfile } from '../store/profile/selectors';
+import { shallowEqual } from "react-redux";
 
 const useStyles = makeStyles({
     root: {
@@ -23,37 +19,80 @@ const useStyles = makeStyles({
         borderRadius: `50%`,
         margin: 50,
     },
-    data: {
-        flexBasis: 100,
+    wrapUserData: {
+        minWidth: 200,
+        display: 'flex',
+        flexDirection: 'column',
     }
 });
 
 export default function Main() {
     const classes = useStyles();
-    const { showName, whenTrueStatus, whenFalseStatus } = useSelector((state) => state)
+    const { showName, whenTrueStatus, whenFalseStatus, name, image, srcImage } = useSelector(getProfile, shallowEqual);
+    const [value, setValue] = useState('');
     const dispatch = useDispatch();
 
     const setShowName = useCallback(() => {
-        dispatch(toggleShowName);
+        dispatch(createChangeUserStatus);
     }, [dispatch]);
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
+
+    const setName = useCallback(() => {
+        dispatch(createChangeUserName(value));
+        setValue('');
+    }, [dispatch, value]);
+
+    //проверяем нажат ли энтер в поле ввода, если нажат отправляем сообщение
+    const checkKey = (event) => {
+        if (checkKeyOnEnter(event.code)) {
+            setName(value);
+        };
+    }
+
+    const writeFile = useCallback((event) => {
+        let selectedFile = event.target.files[0];
+        dispatch(createChangeUserImage(selectedFile));
+    }, [dispatch]);
+
+    const sendImage = useCallback(() => {
+        let reader = new FileReader();
+
+        reader.onload = function (event) {
+            dispatch(createChangeUserSrcImage(event.target.result));
+        };
+
+        reader.readAsDataURL(image);
+    }, [dispatch, image]);
 
     return (
         <>
             <div className={classes.root}>
-                <img className={classes.avatar} src={user.avatar} alt={user.name}></img>
-                <div style={{minWidth: 200}}>
-                    <div className={classes.data}>Имя: {user.name}</div>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={showName}
-                                    onChange={setShowName}
-                                    name="checkedB"
-                                    color="primary"
-                                />
-                            }
-                            label={showName ? <div>{whenTrueStatus}</div> : <div>{whenFalseStatus}</div>}
-                        />
+                <img className={classes.avatar} src={srcImage} alt={name}></img>
+                <div className={classes.wrapUserData}>
+                    <div >Имя: {name}</div>
+                    <input type="text" value={value} onChange={handleChange} placeholder="Вы можете изменить имя" onKeyDown={checkKey} />
+                    <button onClick={setName}>Изменить имя</button>
+                    <div>
+                        <p><strong>Укажите картинку в формате JPEG, PNG или GIF</strong></p>
+                        <p>
+                            <input type="file" name="img" accept="image/jpeg,image/png,image/gif" onChange={writeFile} />
+                            <button onClick={sendImage}>Отправить</button>
+                        </p>
+                    </div>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={showName}
+                                onChange={setShowName}
+                                name="checkedB"
+                                color="primary"
+                            />
+                        }
+                        label={showName ? <div>{whenTrueStatus}</div> : <div>{whenFalseStatus}</div>}
+                    />
                 </div>
             </div>
         </>
