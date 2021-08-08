@@ -12,7 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import Render from '../Render/render'
+import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
 import MessageForm from '../MessageForm/messageForm'
 import Navigation from '../Navigation/navigation';
 import ChatList from '../ChatList/chatList';
@@ -156,7 +156,7 @@ export default function MiniDrawer(props) {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Render messageList={props.messages}></Render>
+                <RenderCurrentMessages />
                 <MessageForm inputVisibility={props.inputVisibility} addMessage={props.addMessage}></MessageForm>
             </main>
         </div >
