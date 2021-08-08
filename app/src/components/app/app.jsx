@@ -1,5 +1,5 @@
 import React from 'react';
-import Chats from '../../pages/chats'
+import Chats from '../../pages/Chats/chats'
 import Main from '../../pages/main';
 import Profile from '../../pages/profile';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
