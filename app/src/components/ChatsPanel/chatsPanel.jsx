@@ -18,7 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
 import Navigation from '../Navigation/navigation';
-import ChatListContainer from '../../containers/ChatListContainer';
+import ChatListContainer from '../../containers/chatListContainer';
 import { createAddChat } from '../../store/chats/actions';
 import MessageFormContainer from '../../containers/MessageFormContainer';
 
