@@ -27,7 +27,7 @@ export default function ChartContainer() {
     });
 
     const refresh = () => dayOneAllStatus.request(currentCountry);
-
+    //TODO сделать обновление всех данных во всех полях
     if(dayOneAllStatus.isLoading) {
         return <CircularProgress />
     }

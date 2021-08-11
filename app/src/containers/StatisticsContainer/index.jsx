@@ -33,7 +33,7 @@ export default function StatisticsContainer() {
     }
 
     if (getSummaryStatistics.isError) {
-        console.warm(getSummaryStatistics.isError);
+        console.error(getSummaryStatistics.isError);
         data = {
             NewConfirmed: "ошибка загрузки данных",
             TotalConfirmed: "ошибка загрузки данных",
