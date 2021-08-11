@@ -7,12 +7,14 @@ import { chatsReducer } from './chats';
 import { messagesReducer } from './messages';
 import { profileReducer } from './profile';
 import { messageFormReducer } from './messageForm';
+import { covid19Reducer } from './covid19'
 
 const rootReducer = combineReducers({
     chats: chatsReducer,
     profile: profileReducer,
     messages: messagesReducer,
     messageForm: messageFormReducer,
+    covid19: covid19Reducer,
 });
 
 const persistConfig = {
@@ -20,26 +22,10 @@ const persistConfig = {
     storage,
 };
 
-//Ответ бота через Middleware
-const botAnswerMiddleware = store => next => action => {
-    // if (action.type === "ADD_MESSAGE" && action.author !== 'Бот') {
-    //     let botMessage = {
-    //         author: 'Бот',
-    //         text: generateBotPhrase(),
-    //     }
-
-    //     setTimeout(() => {
-    //         store.dispatch(createAddMessage(action.chatId, botMessage.author, botMessage.text));
-    //     }, 1500);
-    // }
-
-    return next(action)
-};
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const store = createStore(persistReducer(persistConfig, rootReducer), composeEnhancers(
-    applyMiddleware(botAnswerMiddleware, thunk),
+    applyMiddleware(thunk),
 ));
 
 export const persistor = persistStore(store);
