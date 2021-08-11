@@ -8,7 +8,7 @@ export const useRequestApi = ({api, isAutoRun}) => {
     const request = async (...rest) => {
         setLoading(true);
         const [error, data] = await api(...rest);
-
+        
         if(error) {
             setError(error);
         }

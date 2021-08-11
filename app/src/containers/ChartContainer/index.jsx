@@ -26,16 +26,22 @@ export default function ChartContainer() {
         isAutoRun: false,
     });
 
+    const refresh = () => dayOneAllStatus.request(currentCountry);
 
     if(dayOneAllStatus.isLoading) {
         return <CircularProgress />
     }
 
     if(dayOneAllStatus.isError) {
-        console.warm(dayOneAllStatus.isError);
-        return <div>ошибка загрузки данных</div>
+        console.error(dayOneAllStatus.isError);
+        return (
+            <>
+                <div>Ошибка загрузки данных</div>
+                <button type="button" onClick={refresh}>Перезагрузить</button>
+            </>
+        )
     }
-
+    
     return (
         <Chart 
             dayOneAllStatus={dayOneAllStatus.data || []}
