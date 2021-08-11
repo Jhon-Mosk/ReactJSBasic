@@ -1,16 +1,29 @@
-import { useSelector } from "react-redux";
-import { covid19Api } from "../../api";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import Statistics from "../../components/Statistics";
-import { useRequestApi } from "../../hooks/api/useRequestApi";
-import { getSelectCountry } from "../../store/covid19/selectors";
+
+import { covid19Api } from "../../api";
+import { getSummaryStatistics } from "../../store/covid19/actions";
+import { getSelectCountry, getSummaryStatisticsData, getSummaryStatisticsError, getSummaryStatisticsLoadingStatus } from "../../store/covid19/selectors";
 
 export default function StatisticsContainer() {
+    const dispatch = useDispatch();
     const selectCountry = useSelector(getSelectCountry);
+    const summaryStatisticsLoadingStatus = useSelector(getSummaryStatisticsLoadingStatus);
+    const summaryStatistics = useSelector(getSummaryStatisticsData);
+    const summaryStatisticsError = useSelector(getSummaryStatisticsError);
 
-    const getSummaryStatistics = useRequestApi({
-        api: covid19Api.getSummary,
-        isAutoRun: true,
-    });
+    const getSummaryStatisticsWithThunk = () => {
+        dispatch(getSummaryStatistics(covid19Api.getSummary));
+    }
+    const refresh = () => {
+        getSummaryStatisticsWithThunk();
+    }
+
+    useEffect(() => {
+        getSummaryStatisticsWithThunk();
+    }, []);
 
     let data = {
         NewConfirmed: "нет данных",
@@ -21,7 +34,7 @@ export default function StatisticsContainer() {
         TotalRecovered: "нет данных",
     };
 
-    if (getSummaryStatistics.isLoading) {
+    if (summaryStatisticsLoadingStatus === 1) {
         data = {
             NewConfirmed: "загрузка",
             TotalConfirmed: "загрузка",
@@ -30,10 +43,8 @@ export default function StatisticsContainer() {
             NewRecovered: "загрузка",
             TotalRecovered: "загрузка",
         };
-    }
-
-    if (getSummaryStatistics.isError) {
-        console.error(getSummaryStatistics.isError);
+    } else if (summaryStatisticsLoadingStatus === 3 || summaryStatisticsLoadingStatus === undefined) {
+        console.error(summaryStatisticsError);
         data = {
             NewConfirmed: "ошибка загрузки данных",
             TotalConfirmed: "ошибка загрузки данных",
@@ -42,19 +53,22 @@ export default function StatisticsContainer() {
             NewRecovered: "ошибка загрузки данных",
             TotalRecovered: "ошибка загрузки данных",
         };
+        return (
+            <div>
+                <h3>Ошибка загрузки</h3>
+                <button type="button" onClick={refresh}>Перезагрузить</button>
+            </div>
+        )
     }
 
-    if (getSummaryStatistics.data) {
-        if (selectCountry !== "Global") {
-            const currentData = getSummaryStatistics.data;
-            const dataCountries = currentData.Countries;
-            const currentCountry = dataCountries.filter((item) => selectCountry === item.Slug);
-            if (currentCountry[0] !== undefined) {
-                data = currentCountry[0];
-            }
-        } else {
-            data = getSummaryStatistics.data.Global;
+    if (selectCountry !== "Global") {
+        const dataCountries = summaryStatistics.Countries;
+        const currentCountry = dataCountries.filter((item) => selectCountry === item.Slug);
+        if (currentCountry[0] !== undefined) {
+            data = currentCountry[0];
         }
+    } else {
+        data = summaryStatistics.Global;
     }
 
     return (

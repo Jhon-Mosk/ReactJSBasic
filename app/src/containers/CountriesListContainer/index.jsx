@@ -1,14 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { covid19Api } from "../../api";
+
 import CountriesList from "../../components/CountriesList";
+
+import { covid19Api } from "../../api";
 import { getCountries } from "../../store/covid19/actions";
-import { getCountriesList, getCountriesListLoadingStatus } from "../../store/covid19/selectors";
+import { getCountriesList, getCountriesListError, getCountriesListLoadingStatus } from "../../store/covid19/selectors";
 
 export default function CountriesListContainer() {
     const dispatch = useDispatch();
     const countriesList = useSelector(getCountriesList);
-    const countriesListLoadingStatus = useSelector(getCountriesListLoadingStatus)
+    const countriesListLoadingStatus = useSelector(getCountriesListLoadingStatus);
+    const countriesListError = useSelector(getCountriesListError);
 
     const getCountriesWithThunk = () => {
         dispatch(getCountries(covid19Api.getCountries));
@@ -29,6 +32,7 @@ export default function CountriesListContainer() {
             </select>
         )
     } else if (countriesListLoadingStatus === 3 || countriesListLoadingStatus === undefined) {
+        console.error(countriesListError);
         return (
             <div>
                 <h3>Ошибка загрузки</h3>
