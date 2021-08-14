@@ -20,8 +20,8 @@ export const chatsReducer = (state = initialState, action) => {
                     ...state.chatList,
                     {
                         id: `id${idNumber}`,
-                        name: action.name,
-                        avatar: action.avatar,
+                        name: action.payload.name,
+                        avatar: action.payload.avatar,
                     },
                 ],
             };
@@ -29,7 +29,7 @@ export const chatsReducer = (state = initialState, action) => {
         case REMOVE_CHAT:
             return {                
                 chatList: [
-                    ...state.chatList.filter(item => item.id !== action.id)
+                    ...state.chatList.filter(item => item.id !== action.payload.id)
                 ]
             }
         default:

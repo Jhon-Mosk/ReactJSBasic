@@ -1,4 +1,6 @@
 import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,15 +13,14 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
-import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
-import MessageForm from '../MessageForm/messageForm'
-import Navigation from '../Navigation/navigation';
-import ChatList from '../ChatList/chatList';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { useDispatch } from 'react-redux';
+
+import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
+import Navigation from '../Navigation/navigation';
+import ChatListContainer from '../../containers/ChatListContainer';
 import { createAddChat } from '../../store/chats/actions';
+import MessageFormContainer from '../../containers/MessageFormContainer';
 
 const drawerWidth = 240;
 
@@ -158,13 +159,13 @@ export default function MiniDrawer() {
                 </div>
                 <Divider />
                 <List>
-                    <ChatList/>
+                    <ChatListContainer />
                 </List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <RenderCurrentMessages />
-                <MessageForm />
+                <MessageFormContainer />
             </main>
         </div >
     );

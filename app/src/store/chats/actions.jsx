@@ -5,11 +5,13 @@ export const REMOVE_CHAT = "REMOVE_CHAT";
 
 export const createAddChat = (newChatName) => ({
     type: ADD_CHAT,
-    name: newChatName || Faker.name.firstName(),
-    avatar: Faker.image.avatar(),
+    payload : {
+        name: newChatName || Faker.name.firstName(),
+        avatar: Faker.image.avatar(),
+    },
 });
 
 export const createRemoveChat = (id) => ({
     type: REMOVE_CHAT,
-    id,
+    payload: {id},
 });
