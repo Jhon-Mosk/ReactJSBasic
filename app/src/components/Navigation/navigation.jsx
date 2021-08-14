@@ -35,6 +35,7 @@ export default function Navigation() {
                 <NavLink activeClassName={classes.navLinkActive} className={classes.navLink} to="/main">Main</NavLink>
                 <NavLink activeClassName={classes.navLinkActive} className={classes.navLink} to="/chats">Chats</NavLink>
                 <NavLink activeClassName={classes.navLinkActive} className={classes.navLink} to="/profile">Profile</NavLink>
+                <NavLink activeClassName={classes.navLinkActive} className={classes.navLink} to="/covid19">COVID19</NavLink>
             </div>
         </div>
     );
