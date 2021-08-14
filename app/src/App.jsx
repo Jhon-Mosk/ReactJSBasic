@@ -2,6 +2,7 @@ import React from 'react';
 import Chats from './pages/chats'
 import Main from './pages/main';
 import Profile from './pages/profile';
+import Covid19 from './pages/covid19';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navigation from './components/Navigation/navigation';
 
@@ -28,6 +29,9 @@ export default function App() {
                 </Route>
                 <Route exact path="/profile">
                     <Profile />
+                </Route>
+                <Route path="/covid19">
+                    <Covid19 />
                 </Route>
                 <Route>
                     <h3>Page not found</h3>
