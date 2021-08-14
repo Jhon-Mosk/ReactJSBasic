@@ -6,6 +6,7 @@ import Statistics from "../../components/Statistics";
 import { covid19Api } from "../../api";
 import { getSummaryStatistics } from "../../store/covid19/actions";
 import { getSelectCountry, getSummaryStatisticsData, getSummaryStatisticsError, getSummaryStatisticsLoadingStatus } from "../../store/covid19/selectors";
+import { STATUSES } from "../../store/covid19/statuses";
 
 export default function StatisticsContainer() {
     const dispatch = useDispatch();
@@ -34,7 +35,7 @@ export default function StatisticsContainer() {
         TotalRecovered: "нет данных",
     };
 
-    if (summaryStatisticsLoadingStatus === 1) {
+    if (summaryStatisticsLoadingStatus === STATUSES.REQUEST) {
         data = {
             NewConfirmed: "загрузка",
             TotalConfirmed: "загрузка",
@@ -43,7 +44,7 @@ export default function StatisticsContainer() {
             NewRecovered: "загрузка",
             TotalRecovered: "загрузка",
         };
-    } else if (summaryStatisticsLoadingStatus === 3 || summaryStatisticsLoadingStatus === undefined) {
+    } else if (summaryStatisticsLoadingStatus === STATUSES.FAILURE || summaryStatisticsLoadingStatus === undefined) {
         console.error(summaryStatisticsError);
         data = {
             NewConfirmed: "ошибка загрузки данных",
