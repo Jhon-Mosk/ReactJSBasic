@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import firebase from 'firebase';
 
 import Navigation from '../Navigation/navigation';
 
@@ -7,32 +9,55 @@ import Main from '../../pages/main';
 import Profile from '../../pages/profile';
 import Covid19 from '../../pages/covid19';
 
+import { SignUp } from '../../components/SignUp';
+import { Login } from '../../components/Login';
+import PublicRoute from '../../hocs/PublicRoute';
+import PrivateRoute from '../../hocs/PrivateRoute';
+
 export const Routes = () => {
+    const [authed, setAuthed] = useState(false);
+
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
+                setAuthed(true);
+            } else {
+                setAuthed(false);
+            }
+        })
+    }, [])
+
     return (
         <BrowserRouter>
-            <Navigation></Navigation>
+            <Navigation />
             <Switch>
-                <Route exact path="/">
+                <PublicRoute authenticated={authed} exact path="/">
                     <Main />
-                </Route>
-                <Route exact path="/main">
+                </PublicRoute>
+                <PublicRoute authenticated={authed} exact path="/main">
                     <Main />
-                </Route>
-                <Route path="/chats/:chatId">
+                </PublicRoute>
+                <PublicRoute authenticated={authed} exact path="/login">
+                    <Main />
+                </PublicRoute>
+                <PublicRoute authenticated={authed} exact path="/signup">
+                    <Main />
+                </PublicRoute>
+                <PrivateRoute path="/chats/:chatId?">
                     <Chats />
-                </Route>
-                <Route exact path="/chats">
+                </PrivateRoute>
+                <PrivateRoute authenticated={authed} exact path="/chats">
                     <Chats />
-                </Route>
-                <Route path="/chats/:chatId">
+                </PrivateRoute>
+                <PrivateRoute authenticated={authed} path="/chats/:chatId">
                     <Chats />
-                </Route>
-                <Route exact path="/profile">
+                </PrivateRoute>
+                <PrivateRoute authenticated={authed} exact path="/profile">
                     <Profile />
-                </Route>
-                <Route path="/covid19">
+                </PrivateRoute>
+                <PublicRoute authenticated={authed} path="/covid19">
                     <Covid19 />
-                </Route>
+                </PublicRoute>
                 <Route>
                     <h3>Page not found</h3>
                 </Route>

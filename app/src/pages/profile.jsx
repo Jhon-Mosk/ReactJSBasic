@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import { useCallback, useState } from 'react';
+import firebase from "firebase";
 import { createChangeUserStatus, createChangeUserName, createChangeUserImage, createChangeUserSrcImage } from '../store/profile/actions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -31,6 +32,14 @@ export default function Main() {
     const { showName, whenTrueStatus, whenFalseStatus, name, image, srcImage } = useSelector(getProfile, shallowEqual);
     const [value, setValue] = useState('');
     const dispatch = useDispatch();
+
+    const logOut = () => {
+        firebase.auth().signOut().then(() => {
+            // Sign-out successful.
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
 
     const setShowName = useCallback(() => {
         dispatch(createChangeUserStatus);
@@ -93,6 +102,7 @@ export default function Main() {
                         }
                         label={showName ? <div>{whenTrueStatus}</div> : <div>{whenFalseStatus}</div>}
                     />
+                    <button type="button" onClick={logOut}>Выйти из аккаунта</button>
                 </div>
             </div>
         </>
