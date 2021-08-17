@@ -1,12 +1,32 @@
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import { shallowEqual } from "react-redux";
-import { getMessageList } from '../../store/messages/selectors';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
+import { db } from '../../api/firebase';
+import { getProfileName } from '../../store/profile/selectors';
 
 export default function RenderCurrentMessages() {
-    const messageList = useSelector(getMessageList, shallowEqual);
+    const profileName = useSelector(getProfileName);
+
     const { chatId } = useParams();
+
+    const [messages, setMessages] = useState([]);
+    const [messageId, setMessageId] = useState([]);
+
+    useEffect(() => {
+        db.ref("messages").child(chatId).on("value", (snapshot) => {
+            const newMessages = [];
+            const newMessageId = [];
+
+            snapshot.forEach((entry) => {
+                newMessages.push(entry.val());
+                newMessageId.push(entry.key);   
+            });     
+            console.log(newMessages);
+            setMessageId(newMessageId);
+            setMessages(newMessages);
+        });
+    }, [chatId]);
 
     useEffect (() => {
         let scrollHeight = Math.max(
@@ -15,30 +35,9 @@ export default function RenderCurrentMessages() {
             document.body.clientHeight, document.documentElement.clientHeight
         );
         window.scrollBy(0,scrollHeight)
-    }, [chatId, messageList])
-
-    function isEmpty(obj) {
-        for (let key in obj) {
-            // если тело цикла начнет выполняться - значит в объекте есть свойства
-            return false;
-        }
-        return true;
-    }
-
-    const checkMessageListEmpty = (messageList) => {
-        if(messageList[chatId] === undefined || isEmpty(messageList)) {
-            return (
-                []
-            )
-        }
-        else {
-            return (
-                messageList[chatId]
-            );
-        }
-    };
+    }, [chatId, messages])
 
     return (
-        <>{checkMessageListEmpty(messageList).map((item) => <div key={item.id}>{item.author}: {item.message}</div>)}</>
+        <>{messages.map((item, index) => <div key={messageId[index]}>{profileName}: {item[profileName]}</div>)}</>
     )
 }

@@ -21,6 +21,7 @@ import Navigation from '../Navigation/navigation';
 import ChatListContainer from '../../containers/ChatListContainer';
 import { createAddChat } from '../../store/chats/actions';
 import MessageFormContainer from '../../containers/MessageFormContainer';
+import { useParams } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -99,6 +100,7 @@ export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
+    const { chatId } = useParams();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -164,7 +166,7 @@ export default function MiniDrawer() {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <RenderCurrentMessages />
+                {chatId ? <RenderCurrentMessages /> : ""}
                 <MessageFormContainer />
             </main>
         </div >

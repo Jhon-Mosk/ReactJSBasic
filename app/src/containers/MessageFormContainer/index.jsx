@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+
+import { db } from '../../api/firebase';
 
 import { createAddMessage } from '../../store/messages/actions';
 import { getProfileName } from '../../store/profile/selectors';
@@ -15,10 +17,23 @@ import { checkKeyOnEnter } from '../../utils/checkKeyOnEnter';
 function MessageFormContainer() {
     const profileName = useSelector(getProfileName);
     const chatList = useSelector(getChatList);
-    
+
     const [value, setValue] = useState('');
+
     const { chatId } = useParams();
+    
     const dispatch = useDispatch();
+
+    const onAddMessage = useCallback(
+        (id, author, message) => {            
+            db
+                .ref("messages")
+                .child(chatId)
+                .child(id)
+                .child(author)
+                .set(message);
+        }, [chatId]
+    );
 
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -43,8 +58,10 @@ function MessageFormContainer() {
 
     //отправляем сообщение в хранилище WithThunk
     const sendUserMessage = useCallback((message) => {
-        let author = profileName || 'Я';
-        dispatch(sendUserMessageWithThunk(chatId, author, message));
+        
+        let author = profileName;
+        let messageId = Date.now().toString();
+        onAddMessage(messageId, author, message);
         setValue('');
     }, [chatId, dispatch, profileName]);
 
