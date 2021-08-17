@@ -49,10 +49,3 @@ export const createRemoveMessages = (chatId) => async (dispatch) => {
         },
     })
 }
-
-// export const createRemoveMessages = (chatId) => ({
-//     type: REMOVE_MESSAGES,
-//     payload: {
-//         chatId,
-//     },
-// });

@@ -11,6 +11,7 @@ import generateBotPhrase from '../../components/BotPhrase/botPhrase';
 import MessageForm from '../../components/MessageForm/messageForm';
 
 import { checkKeyOnEnter } from '../../utils/checkKeyOnEnter';
+import generateIdFromDate from '../../utils/generateIdFromDate';
 
 function MessageFormContainer() {
     const profileName = useSelector(getProfileName);
@@ -46,7 +47,7 @@ function MessageFormContainer() {
 
     //отправляем сообщение в хранилище WithThunk
     const sendUserMessage = useCallback((message) => {        
-        let messageId = Date.now().toString();
+        let messageId = generateIdFromDate();
         dispatch(sendUserMessageWithThunk(chatId, messageId, profileName, message));
         // onAddMessage(messageId, author, message);
         setValue('');

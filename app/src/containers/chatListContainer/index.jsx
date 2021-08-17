@@ -7,6 +7,7 @@ import { createRemoveChat } from '../../store/chats/actions';
 import { createHideMessageForm, createShowMessageForm } from '../../store/messageForm';
 import { getChatList } from '../../store/chats/selectors';
 import { createRemoveMessages } from '../../store/messages';
+
 import ChatList from '../../components/ChatList/chatList';
 
 export default function ChatListContainer() {
