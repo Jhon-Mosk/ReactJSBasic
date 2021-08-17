@@ -86,7 +86,7 @@ export const Login = () => {
                 <DialogContent>
                     <DialogContentText>
                         {error && <p>{error}</p>}
-                        Ещё не зарегистрированны? <Link to="/signup">Зарегистрироваться</Link>
+                        Ещё не зарегистрированны? <Link onClick={handleClose} to="/signup">Зарегистрироваться</Link>
                     </DialogContentText>
                 </DialogContent>
             </Dialog>

@@ -1,13 +1,17 @@
-import { makeStyles } from '@material-ui/core';
 import { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual } from "react-redux";
+
 import firebase from "firebase";
+
 import { createChangeUserStatus, createChangeUserName, createChangeUserImage, createChangeUserSrcImage } from '../store/profile/actions';
+import { getProfile } from '../store/profile/selectors';
+
+import { makeStyles } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { checkKeyOnEnter } from '../utils/checkKeyOnEnter';
-import { getProfile } from '../store/profile/selectors';
-import { shallowEqual } from "react-redux";
 
 const useStyles = makeStyles({
     root: {
@@ -32,6 +36,7 @@ export default function Main() {
     const { showName, whenTrueStatus, whenFalseStatus, name, image, srcImage } = useSelector(getProfile, shallowEqual);
     const [value, setValue] = useState('');
     const dispatch = useDispatch();
+    const user = firebase.auth().currentUser;
 
     const logOut = () => {
         firebase.auth().signOut().then(() => {
@@ -81,7 +86,7 @@ export default function Main() {
             <div className={classes.root}>
                 <img className={classes.avatar} src={srcImage} alt={name}></img>
                 <div className={classes.wrapUserData}>
-                    <div >Имя: {name}</div>
+                    <div >Имя: {user.displayName || name}</div>
                     <input type="text" value={value} onChange={handleChange} placeholder="Вы можете изменить имя" onKeyDown={checkKey} />
                     <button onClick={setName}>Изменить имя</button>
                     <div>

@@ -11,6 +11,7 @@ import Chats from '../../pages/chats'
 import Main from '../../pages/main';
 import Profile from '../../pages/profile';
 import Covid19 from '../../pages/covid19';
+import { SignUp } from '../SignUp';
 
 export const Routes = () => {
     const [authed, setAuthed] = useState(false);
@@ -39,7 +40,7 @@ export const Routes = () => {
                     <Main />
                 </PublicRoute>
                 <PublicRoute authenticated={authed} exact path="/signup">
-                    <Main />
+                    <SignUp />
                 </PublicRoute>               
                 <PrivateRoute authenticated={authed} exact path="/chats">
                     <Chats />

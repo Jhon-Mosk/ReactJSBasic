@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import firebase from "firebase";
+
 import { createAddMessage, initMessageTracking } from '../../store/messages/actions';
 import { getProfileName } from '../../store/profile/selectors';
 import { createHideMessageForm, createShowMessageForm } from '../../store/messageForm';
@@ -16,6 +18,7 @@ import generateIdFromDate from '../../utils/generateIdFromDate';
 function MessageFormContainer() {
     const profileName = useSelector(getProfileName);
     const chatList = useSelector(getChatList);
+    const user = firebase.auth().currentUser;
 
     const [value, setValue] = useState('');
 
@@ -48,10 +51,10 @@ function MessageFormContainer() {
     //отправляем сообщение в хранилище WithThunk
     const sendUserMessage = useCallback((message) => {        
         let messageId = generateIdFromDate();
-        dispatch(sendUserMessageWithThunk(chatId, messageId, profileName, message));
+        dispatch(sendUserMessageWithThunk(chatId, messageId, user.displayName || profileName, message));
         // onAddMessage(messageId, author, message);
         setValue('');
-    }, [chatId, dispatch, profileName]);
+    }, [chatId, dispatch, user.displayName, profileName]);
 
     useEffect(() => {
         dispatch(initMessageTracking());
