@@ -1,33 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
-import { db } from '../../api/firebase';
-import { getProfileName } from '../../store/profile/selectors';
+import { getMessageList } from '../../store/messages';
 
 export default function RenderCurrentMessages() {
-    const profileName = useSelector(getProfileName);
+    const messageList = useSelector(getMessageList);
 
     const { chatId } = useParams();
 
-    const [messages, setMessages] = useState([]);
-    const [messageId, setMessageId] = useState([]);
-
-    useEffect(() => {
-        db.ref("messages").child(chatId).on("value", (snapshot) => {
-            const newMessages = [];
-            const newMessageId = [];
-
-            snapshot.forEach((entry) => {
-                newMessages.push(entry.val());
-                newMessageId.push(entry.key);   
-            });     
-            console.log(newMessages);
-            setMessageId(newMessageId);
-            setMessages(newMessages);
-        });
-    }, [chatId]);
-
+    const currentMessages = messageList[chatId];
+    
     useEffect (() => {
         let scrollHeight = Math.max(
             document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -35,9 +18,21 @@ export default function RenderCurrentMessages() {
             document.body.clientHeight, document.documentElement.clientHeight
         );
         window.scrollBy(0,scrollHeight)
-    }, [chatId, messages])
+    }, [chatId, currentMessages])
+
+    const exstractAuthor = (item) => {
+        for(let value in item) {
+            return value
+        }
+    }
+
+    const exstractMessage = (item) => {
+        for(let value in item) {
+            return item[value]
+        }
+    }
 
     return (
-        <>{messages.map((item, index) => <div key={messageId[index]}>{profileName}: {item[profileName]}</div>)}</>
+        <>{currentMessages.map((item, index) => <div key={messageList.messageId[index]}>{exstractAuthor(item)}: {exstractMessage(item)}</div>)}</>
     )
 }

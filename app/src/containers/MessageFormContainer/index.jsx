@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { db } from '../../api/firebase';
-
-import { createAddMessage } from '../../store/messages/actions';
+import { createAddMessage, initMessageTracking } from '../../store/messages/actions';
 import { getProfileName } from '../../store/profile/selectors';
 import { createHideMessageForm, createShowMessageForm } from '../../store/messageForm';
 import { getChatList } from '../../store/chats';
@@ -24,17 +22,6 @@ function MessageFormContainer() {
     
     const dispatch = useDispatch();
 
-    const onAddMessage = useCallback(
-        (id, author, message) => {            
-            db
-                .ref("messages")
-                .child(chatId)
-                .child(id)
-                .child(author)
-                .set(message);
-        }, [chatId]
-    );
-
     const handleChange = (event) => {
         setValue(event.target.value);
     }
@@ -45,25 +32,29 @@ function MessageFormContainer() {
     }
 
     //ответ бота на каждое сообщение WithThunk
-    const sendUserMessageWithThunk = (chatId, author, message) => (dispatch, getState) => {
-        dispatch(createAddMessage(chatId, author, message));
+    const sendUserMessageWithThunk = (chatId, id, author, message) => (dispatch, getState) => {
+        dispatch(createAddMessage(chatId, id, author, message));
         if (author !== 'Бот') {
             let botMessage = {
+                id: id + 1,
                 author: getBotName(),
                 text: generateBotPhrase(),
             };
-            setTimeout(() => dispatch(createAddMessage(chatId, botMessage.author, botMessage.text)), 1500);
+            setTimeout(() => dispatch(createAddMessage(chatId, botMessage.id, botMessage.author, botMessage.text)), 1500);
         }
     };
 
     //отправляем сообщение в хранилище WithThunk
-    const sendUserMessage = useCallback((message) => {
-        
-        let author = profileName;
+    const sendUserMessage = useCallback((message) => {        
         let messageId = Date.now().toString();
-        onAddMessage(messageId, author, message);
+        dispatch(sendUserMessageWithThunk(chatId, messageId, profileName, message));
+        // onAddMessage(messageId, author, message);
         setValue('');
     }, [chatId, dispatch, profileName]);
+
+    useEffect(() => {
+        dispatch(initMessageTracking());
+    }, []);
 
     //проверяем нажат ли энтер в поле ввода, если нажат отправляем сообщение
     const checkKey = (event) => {
