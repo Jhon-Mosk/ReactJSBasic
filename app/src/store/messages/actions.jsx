@@ -39,10 +39,20 @@ export const initMessageTracking = () => (dispatch) => {
     })
 }
 
-export const createRemoveMessages = (chatId) => ({
-    type: REMOVE_MESSAGES,
-    payload: {
-        chatId,
-    },
-});
+export const createRemoveMessages = (chatId) => async (dispatch) => {
+    db.ref("messages").child(chatId).remove();
 
+    dispatch({
+        type: REMOVE_MESSAGES,
+        payload: {
+            chatId,
+        },
+    })
+}
+
+// export const createRemoveMessages = (chatId) => ({
+//     type: REMOVE_MESSAGES,
+//     payload: {
+//         chatId,
+//     },
+// });

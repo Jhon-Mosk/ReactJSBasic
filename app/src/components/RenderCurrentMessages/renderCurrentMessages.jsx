@@ -9,7 +9,7 @@ export default function RenderCurrentMessages() {
 
     const { chatId } = useParams();
 
-    const currentMessages = messageList[chatId];
+    const currentMessages = messageList[chatId] || [];
     
     useEffect (() => {
         let scrollHeight = Math.max(
