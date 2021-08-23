@@ -1,13 +1,16 @@
-import { useSelector } from 'react-redux';
-import { useParams } from "react-router-dom";
-import { shallowEqual } from "react-redux";
-import { getMessageList } from '../../store/messages/selectors';
 import { useEffect } from 'react';
+import { useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
+
+import { getMessageList } from '../../store/messages';
 
 export default function RenderCurrentMessages() {
-    const messageList = useSelector(getMessageList, shallowEqual);
+    const messageList = useSelector(getMessageList);
+
     const { chatId } = useParams();
 
+    const currentMessages = messageList[chatId] || [];
+    
     useEffect (() => {
         let scrollHeight = Math.max(
             document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -15,30 +18,21 @@ export default function RenderCurrentMessages() {
             document.body.clientHeight, document.documentElement.clientHeight
         );
         window.scrollBy(0,scrollHeight)
-    }, [chatId, messageList])
+    }, [chatId, currentMessages])
 
-    function isEmpty(obj) {
-        for (let key in obj) {
-            // если тело цикла начнет выполняться - значит в объекте есть свойства
-            return false;
+    const exstractAuthor = (item) => {
+        for(let value in item) {
+            return value
         }
-        return true;
     }
 
-    const checkMessageListEmpty = (messageList) => {
-        if(messageList[chatId] === undefined || isEmpty(messageList)) {
-            return (
-                []
-            )
+    const exstractMessage = (item) => {
+        for(let value in item) {
+            return item[value]
         }
-        else {
-            return (
-                messageList[chatId]
-            );
-        }
-    };
-
+    }
+    
     return (
-        <>{checkMessageListEmpty(messageList).map((item) => <div key={item.id}>{item.author}: {item.message}</div>)}</>
+        <>{currentMessages.map((item, index) => <div key={messageList.messageId[index]}>{exstractAuthor(item)}: {exstractMessage(item)}</div>)}</>
     )
 }

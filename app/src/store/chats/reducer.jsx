@@ -6,20 +6,13 @@ const initialState = {
 
 export const chatsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_CHAT:
-            //проверка какой id можно установить
-            let idNumber = state.chatList.length;
-            for(let item of state.chatList) {
-                if(idNumber == item.id.slice(2)) {
-                    idNumber++;
-                }
-            }
+        case ADD_CHAT:            
             return {
                 ...state,
                 chatList: [
                     ...state.chatList,
                     {
-                        id: `id${idNumber}`,
+                        id: action.payload.id,
                         name: action.payload.name,
                         avatar: action.payload.avatar,
                     },

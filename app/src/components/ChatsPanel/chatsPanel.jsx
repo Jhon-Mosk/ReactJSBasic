@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import clsx from 'clsx';
+
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,11 +18,15 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
-import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
-import Navigation from '../Navigation/navigation';
-import ChatListContainer from '../../containers/ChatListContainer';
 import { createAddChat } from '../../store/chats/actions';
+
+import ChatListContainer from '../../containers/ChatListContainer';
 import MessageFormContainer from '../../containers/MessageFormContainer';
+
+import Navigation from '../Navigation/navigation';
+import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
+
+import generateIdFromDate from '../../utils/generateIdFromDate';
 
 const drawerWidth = 240;
 
@@ -99,6 +105,7 @@ export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
+    const { chatId } = useParams();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -109,7 +116,7 @@ export default function MiniDrawer() {
     };
     //добавление нового чата
     const plusChat = useCallback(() => {
-        dispatch(createAddChat());
+        dispatch(createAddChat(generateIdFromDate()));
     }, [dispatch]);
 
     return (
@@ -164,7 +171,7 @@ export default function MiniDrawer() {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <RenderCurrentMessages />
+                {chatId ? <RenderCurrentMessages /> : ""}
                 <MessageFormContainer />
             </main>
         </div >
