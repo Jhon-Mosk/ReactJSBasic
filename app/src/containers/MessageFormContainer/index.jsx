@@ -38,7 +38,7 @@ function MessageFormContainer() {
     //ответ бота на каждое сообщение WithThunk
     const sendUserMessageWithThunk = (chatId, id, author, message) => (dispatch, getState) => {
         dispatch(createAddMessage(chatId, id, author, message));
-        if (author !== 'Бот') {
+        if (author !== 'Бот') {                   
             let botMessage = {
                 id: id + 1,
                 author: getBotName(),
@@ -49,10 +49,9 @@ function MessageFormContainer() {
     };
 
     //отправляем сообщение в хранилище WithThunk
-    const sendUserMessage = useCallback((message) => {        
+    const sendUserMessage = useCallback((message) => { 
         let messageId = generateIdFromDate();
         dispatch(sendUserMessageWithThunk(chatId, messageId, user.displayName || profileName, message));
-        // onAddMessage(messageId, author, message);
         setValue('');
     }, [chatId, dispatch, user.displayName, profileName]);
 

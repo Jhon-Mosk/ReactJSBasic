@@ -31,7 +31,7 @@ export default function RenderCurrentMessages() {
             return item[value]
         }
     }
-
+    
     return (
         <>{currentMessages.map((item, index) => <div key={messageList.messageId[index]}>{exstractAuthor(item)}: {exstractMessage(item)}</div>)}</>
     )

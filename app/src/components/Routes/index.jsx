@@ -6,12 +6,12 @@ import PublicRoute from '../../hocs/PublicRoute';
 import PrivateRoute from '../../hocs/PrivateRoute';
 
 import Navigation from '../Navigation/navigation';
+import { SignUp } from '../SignUp';
 
 import Chats from '../../pages/chats'
 import Main from '../../pages/main';
 import Profile from '../../pages/profile';
 import Covid19 from '../../pages/covid19';
-import { SignUp } from '../SignUp';
 
 export const Routes = () => {
     const [authed, setAuthed] = useState(false);

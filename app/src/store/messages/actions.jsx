@@ -22,7 +22,7 @@ export const createAddMessage = (chatId, id, author, message) => async () => {
 export const initMessageTracking = () => (dispatch) => {
     db.ref("messages").on("child_changed", (snapshot) => {
         const payload = getPayloadFromSnapshot(snapshot);
-
+        
         dispatch({
             type: ADD_MESSAGE,
             payload,
