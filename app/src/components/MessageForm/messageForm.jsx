@@ -40,7 +40,7 @@ function MessageForm(props) {
     useEffect(() => {
         props.hideMessageForm()
         for(let item of props.chatList) {
-            if(props.chatId === item.id) {               
+            if(props.chatId === item.id) {              
                 props.showMessageForm()                
             } 
         } 

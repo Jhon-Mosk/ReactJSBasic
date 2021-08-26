@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import firebase from 'firebase';
+
+import { createLoadChats } from '../../store/chats';
+import { createLoadMessages } from '../../store/messages';
 
 import PublicRoute from '../../hocs/PublicRoute';
 import PrivateRoute from '../../hocs/PrivateRoute';
@@ -15,11 +20,14 @@ import Covid19 from '../../pages/covid19';
 
 export const Routes = () => {
     const [authed, setAuthed] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged((user) => {
             if(user) {
                 setAuthed(true);
+                dispatch(createLoadChats());
+                dispatch(createLoadMessages());
             } else {
                 setAuthed(false);
             }

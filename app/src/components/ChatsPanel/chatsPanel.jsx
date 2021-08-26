@@ -26,8 +26,6 @@ import MessageFormContainer from '../../containers/MessageFormContainer';
 import Navigation from '../Navigation/navigation';
 import RenderCurrentMessages from '../RenderCurrentMessages/renderCurrentMessages'
 
-import generateIdFromDate from '../../utils/generateIdFromDate';
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -116,7 +114,7 @@ export default function MiniDrawer() {
     };
     //добавление нового чата
     const plusChat = useCallback(() => {
-        dispatch(createAddChat(generateIdFromDate()));
+        dispatch(createAddChat());
     }, [dispatch]);
 
     return (
